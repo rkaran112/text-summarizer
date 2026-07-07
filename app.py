@@ -1,15 +1,20 @@
+import os
+
 from flask import Flask, request, render_template, jsonify
 import requests
 
 app = Flask(__name__)
 
 def summarizer(user_input):
+    api_token = os.environ.get("HF_API_TOKEN")
+    if not api_token:
+        return "Error: HF_API_TOKEN environment variable is not set."
+
     API_URL = "https://api-inference.huggingface.co/models/facebook/bart-large-cnn"
-    headers = {"Authorization": "Bearer HUGGING_FACE_HF_CODE_HERE"}  
+    headers = {"Authorization": f"Bearer {api_token}"}
     payload = {"inputs": user_input}
 
     try:
-       
         response = requests.post(API_URL, headers=headers, json=payload)
         response.raise_for_status()  # If the request fails, it will raise an error
         return response.json()[0]["summary_text"]

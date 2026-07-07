@@ -24,13 +24,13 @@ There is no `requirements.txt` in the repo, so dependencies must be installed ma
 pip install flask requests
 ```
 
-You also need a Hugging Face API token. Currently the token is hardcoded as a placeholder string in `app.py`:
+You also need a Hugging Face API token. Set it as an environment variable before running the app:
 
-```python
-headers = {"Authorization": "Bearer HUGGING_FACE_HF_CODE_HERE"}
+```bash
+export HF_API_TOKEN=your_hugging_face_token_here
 ```
 
-You must edit `app.py` and replace `HUGGING_FACE_HF_CODE_HERE` with a real Hugging Face API token before the app will work.
+If `HF_API_TOKEN` isn't set, the app returns an error instead of calling the API.
 
 ## Usage
 
@@ -46,7 +46,6 @@ This starts the development server (debug mode is on) at `http://127.0.0.1:5000/
 
 **Work in progress** — not production ready:
 
-- The Hugging Face API token is a hardcoded placeholder in source (`HUGGING_FACE_HF_CODE_HERE`), not loaded from an environment variable or config file. It must be manually edited into the code to run.
 - No `requirements.txt` (or `pyproject.toml`) is committed, so dependencies aren't pinned or easily installable.
 - `app.run(debug=True)` is left on, which is not suitable for production use.
 - Git history shows `summarizer.py`, `utils.py`, and `templates/summary.html` were deleted from the repo, and their compiled bytecode (`__pycache__/summarizer.cpython-312.pyc`, `__pycache__/utils.cpython-312.pyc`) is still present — suggesting the project previously had more structure (likely a separate summarizer module and utils) that was since removed, leaving all logic inlined in `app.py`.
