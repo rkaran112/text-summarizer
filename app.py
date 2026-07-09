@@ -15,9 +15,12 @@ def summarizer(user_input):
     payload = {"inputs": user_input}
 
     try:
-        response = requests.post(API_URL, headers=headers, json=payload)
+        response = requests.post(API_URL, headers=headers, json=payload, timeout=30)
         response.raise_for_status()  # If the request fails, it will raise an error
         return response.json()[0]["summary_text"]
+    except requests.exceptions.Timeout:
+        print("Error: Hugging Face API request timed out")
+        return "Error: The request timed out. Please try again later."
     except Exception as e:
         print(f"Error: {e}")
         return "Error summarizing text. Please try again later."
