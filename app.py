@@ -21,6 +21,18 @@ def summarizer(user_input):
     except requests.exceptions.Timeout:
         print("Error: Hugging Face API request timed out")
         return "Error: The request timed out. Please try again later."
+    except requests.exceptions.HTTPError:
+        if response.status_code == 503:
+            wait_time = None
+            try:
+                wait_time = response.json().get("estimated_time")
+            except ValueError:
+                pass
+            if wait_time:
+                return f"The summarization model is still loading. Please try again in about {int(wait_time)} seconds."
+            return "The summarization model is still loading. Please try again shortly."
+        print(f"Error: {response.status_code} {response.text}")
+        return "Error summarizing text. Please try again later."
     except Exception as e:
         print(f"Error: {e}")
         return "Error summarizing text. Please try again later."

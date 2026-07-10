@@ -48,4 +48,5 @@ This starts the development server (debug mode is on) at `http://127.0.0.1:5000/
 
 - `app.run(debug=True)` is left on, which is not suitable for production use.
 - Git history shows `summarizer.py`, `utils.py`, and `templates/summary.html` were deleted from the repo, and their compiled bytecode (`__pycache__/summarizer.cpython-312.pyc`, `__pycache__/utils.cpython-312.pyc`) is still present — suggesting the project previously had more structure (likely a separate summarizer module and utils) that was since removed, leaving all logic inlined in `app.py`.
-- No tests, no input length limits, and no handling of Hugging Face API rate limiting/cold-start responses (the free Inference API often returns a "model loading" response that isn't handled here).
+- No tests and no input length limits.
+- The Hugging Face "model loading" cold-start response (HTTP 503) is now handled with a friendly retry message, but rate limiting is still not handled.
