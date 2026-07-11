@@ -31,6 +31,11 @@ def summarizer(user_input):
             if wait_time:
                 return f"The summarization model is still loading. Please try again in about {int(wait_time)} seconds."
             return "The summarization model is still loading. Please try again shortly."
+        if response.status_code == 429:
+            retry_after = response.headers.get("Retry-After")
+            if retry_after:
+                return f"Rate limit reached. Please try again in about {retry_after} seconds."
+            return "Rate limit reached. Please try again shortly."
         print(f"Error: {response.status_code} {response.text}")
         return "Error summarizing text. Please try again later."
     except Exception as e:
