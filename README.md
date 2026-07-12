@@ -32,6 +32,17 @@ export HF_API_TOKEN=your_hugging_face_token_here
 
 If `HF_API_TOKEN` isn't set, the app returns an error instead of calling the API.
 
+## Tests
+
+Install dev dependencies and run the test suite with pytest:
+
+```bash
+pip install -r requirements-dev.txt
+pytest
+```
+
+The tests cover `summarizer()`'s handling of a successful response, a missing API token, a request timeout, the 503 cold-start case, the 429 rate-limit case, and other HTTP errors.
+
 ## Usage
 
 Run the Flask app directly:
@@ -48,5 +59,5 @@ This starts the development server (debug mode is on) at `http://127.0.0.1:5000/
 
 - `app.run(debug=True)` is left on, which is not suitable for production use.
 - Git history shows `summarizer.py`, `utils.py`, and `templates/summary.html` were deleted from the repo, and their compiled bytecode (`__pycache__/summarizer.cpython-312.pyc`, `__pycache__/utils.cpython-312.pyc`) is still present — suggesting the project previously had more structure (likely a separate summarizer module and utils) that was since removed, leaving all logic inlined in `app.py`.
-- No tests and no input length limits.
+- Basic unit tests exist for `summarizer()` (see `tests/`), but there are no input length limits and no tests for the Flask routes themselves.
 - The Hugging Face "model loading" cold-start response (HTTP 503) and rate limiting (HTTP 429) are both handled with friendly retry messages.
