@@ -5,7 +5,7 @@ import requests
 
 os.environ.setdefault("HF_API_TOKEN", "test-token")
 
-from app import summarizer
+from app import app, summarizer
 
 
 def _mock_response(status_code=200, json_data=None, headers=None, raise_for_status_error=None):
@@ -69,3 +69,17 @@ def test_summarizer_generic_http_error(mock_post):
     mock_post.return_value = response
     result = summarizer("some text")
     assert result == "Error summarizing text. Please try again later."
+
+
+def test_process_rejects_whitespace_only_input():
+    client = app.test_client()
+    response = client.post('/process', data={'user_input': '   '})
+    assert response.status_code == 400
+    assert response.get_json() == {"error": "No input provided"}
+
+
+def test_process_rejects_missing_input():
+    client = app.test_client()
+    response = client.post('/process', data={})
+    assert response.status_code == 400
+    assert response.get_json() == {"error": "No input provided"}

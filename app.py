@@ -48,7 +48,7 @@ def index():
 
 @app.route('/process', methods=['POST'])
 def process_text():
-    user_input = request.form.get('user_input')  # Get input text from the form
+    user_input = request.form.get('user_input', '').strip()  # Get input text from the form
     if not user_input:
         return jsonify({"error": "No input provided"}), 400
 
