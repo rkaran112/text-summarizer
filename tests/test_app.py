@@ -71,6 +71,22 @@ def test_summarizer_generic_http_error(mock_post):
     assert result == "Error summarizing text. Please try again later."
 
 
+def test_index_route():
+    client = app.test_client()
+    response = client.get('/')
+    assert response.status_code == 200
+
+
+@patch("app.summarizer")
+def test_process_returns_summary(mock_summarizer):
+    mock_summarizer.return_value = "a short summary"
+    client = app.test_client()
+    response = client.post('/process', data={'user_input': 'some long text to summarize'})
+    assert response.status_code == 200
+    assert response.get_json() == {"summary": "a short summary"}
+    mock_summarizer.assert_called_once_with('some long text to summarize')
+
+
 def test_process_rejects_whitespace_only_input():
     client = app.test_client()
     response = client.post('/process', data={'user_input': '   '})
