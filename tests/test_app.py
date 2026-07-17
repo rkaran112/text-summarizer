@@ -99,3 +99,14 @@ def test_process_rejects_missing_input():
     response = client.post('/process', data={})
     assert response.status_code == 400
     assert response.get_json() == {"error": "No input provided"}
+
+
+def test_process_rejects_input_over_max_length():
+    from app import MAX_INPUT_LENGTH
+
+    client = app.test_client()
+    response = client.post('/process', data={'user_input': 'a' * (MAX_INPUT_LENGTH + 1)})
+    assert response.status_code == 400
+    assert response.get_json() == {
+        "error": f"Input exceeds maximum length of {MAX_INPUT_LENGTH} characters"
+    }

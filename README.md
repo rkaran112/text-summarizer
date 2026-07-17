@@ -59,5 +59,5 @@ This starts the development server (debug mode is on) at `http://127.0.0.1:5000/
 
 - `app.run(debug=True)` is left on, which is not suitable for production use.
 - Git history shows `summarizer.py`, `utils.py`, and `templates/summary.html` were deleted from the repo — suggesting the project previously had more structure (likely a separate summarizer module and utils) that was since removed, leaving all logic inlined in `app.py`.
-- Unit tests exist for `summarizer()`, the `/` route, and the `/process` route's success and input-validation paths (see `tests/`), but there are still no input length limits and no test covering a real (non-mocked) API call.
+- Unit tests exist for `summarizer()`, the `/` route, and the `/process` route's success and input-validation paths (see `tests/`), including a max input length limit (5000 characters), but there is still no test covering a real (non-mocked) API call.
 - The Hugging Face "model loading" cold-start response (HTTP 503) and rate limiting (HTTP 429) are both handled with friendly retry messages.

@@ -5,6 +5,8 @@ import requests
 
 app = Flask(__name__)
 
+MAX_INPUT_LENGTH = 5000
+
 def summarizer(user_input):
     api_token = os.environ.get("HF_API_TOKEN")
     if not api_token:
@@ -51,6 +53,8 @@ def process_text():
     user_input = request.form.get('user_input', '').strip()  # Get input text from the form
     if not user_input:
         return jsonify({"error": "No input provided"}), 400
+    if len(user_input) > MAX_INPUT_LENGTH:
+        return jsonify({"error": f"Input exceeds maximum length of {MAX_INPUT_LENGTH} characters"}), 400
 
     summarized_text = summarizer(user_input)
     return jsonify({"summary": summarized_text})
