@@ -74,6 +74,9 @@
                 if (data.summary) {
                     // Update the summary output textarea with the result from Hugging Face API
                     document.getElementById("summary_output").value = data.summary;
+                } else if (data.error) {
+                    // Show the specific error message returned by the backend (e.g. validation errors)
+                    document.getElementById("summary_output").value = data.error;
                 } else {
                     document.getElementById("summary_output").value = "An error occurred. Please try again.";
                 }
