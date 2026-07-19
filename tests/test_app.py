@@ -71,6 +71,13 @@ def test_summarizer_generic_http_error(mock_post):
     assert result == "Error summarizing text. Please try again later."
 
 
+@patch("app.requests.post")
+def test_summarizer_connection_error(mock_post):
+    mock_post.side_effect = requests.exceptions.ConnectionError("network unreachable")
+    result = summarizer("some text")
+    assert result == "Error summarizing text. Please try again later."
+
+
 def test_index_route():
     client = app.test_client()
     response = client.get('/')
