@@ -117,3 +117,13 @@ def test_process_rejects_input_over_max_length():
     assert response.get_json() == {
         "error": f"Input exceeds maximum length of {MAX_INPUT_LENGTH} characters"
     }
+
+
+def test_process_rejects_oversized_request_body():
+    max_content_length = app.config['MAX_CONTENT_LENGTH']
+
+    client = app.test_client()
+    response = client.post(
+        '/process', data={'user_input': 'a' * (max_content_length + 1)}
+    )
+    assert response.status_code == 413

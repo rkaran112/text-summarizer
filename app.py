@@ -7,6 +7,10 @@ app = Flask(__name__)
 
 MAX_INPUT_LENGTH = 5000
 
+# Reject oversized request bodies before they're buffered in memory. Comfortably
+# covers MAX_INPUT_LENGTH's worst-case UTF-8 size plus multipart/form overhead.
+app.config["MAX_CONTENT_LENGTH"] = 32 * 1024
+
 def summarizer(user_input):
     api_token = os.environ.get("HF_API_TOKEN")
     if not api_token:
