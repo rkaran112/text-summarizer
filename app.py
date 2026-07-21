@@ -50,7 +50,7 @@ def summarizer(user_input):
 
 @app.route('/')
 def index():
-    return render_template('index.html')  # Render the HTML form
+    return render_template('index.html', max_input_length=MAX_INPUT_LENGTH)  # Render the HTML form
 
 @app.route('/process', methods=['POST'])
 def process_text():

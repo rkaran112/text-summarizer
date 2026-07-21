@@ -84,6 +84,14 @@ def test_index_route():
     assert response.status_code == 200
 
 
+def test_index_route_sets_textarea_maxlength():
+    from app import MAX_INPUT_LENGTH
+
+    client = app.test_client()
+    response = client.get('/')
+    assert f'maxlength="{MAX_INPUT_LENGTH}"'.encode() in response.data
+
+
 @patch("app.summarizer")
 def test_process_returns_summary(mock_summarizer):
     mock_summarizer.return_value = "a short summary"
