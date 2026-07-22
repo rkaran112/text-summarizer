@@ -71,8 +71,9 @@
 
                 const data = await response.json();  // Parse the JSON response
 
-                if (data.summary) {
+                if (typeof data.summary === "string") {
                     // Update the summary output textarea with the result from Hugging Face API
+                    // (checked by type, not truthiness, so a legitimately empty summary still shows)
                     document.getElementById("summary_output").value = data.summary;
                 } else if (data.error) {
                     // Show the specific error message returned by the backend (e.g. validation errors)
