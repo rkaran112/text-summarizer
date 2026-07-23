@@ -30,6 +30,13 @@ def test_summarizer_success(mock_post):
 
 
 @patch("app.requests.post")
+def test_summarizer_malformed_response(mock_post):
+    mock_post.return_value = _mock_response(json_data=[{"unexpected_key": "oops"}])
+    result = summarizer("some text")
+    assert result == "Error summarizing text. Please try again later."
+
+
+@patch("app.requests.post")
 def test_summarizer_timeout(mock_post):
     mock_post.side_effect = requests.exceptions.Timeout()
     assert summarizer("some text") == "Error: The request timed out. Please try again later."
